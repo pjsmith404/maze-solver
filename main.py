@@ -1,6 +1,6 @@
 from random import randrange
 
-from window import Window, Line, Point
+from graphics import Window, Line, Point
 
 def main():
     print("Running")
