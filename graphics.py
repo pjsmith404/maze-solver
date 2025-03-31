@@ -21,7 +21,7 @@ class Window:
     def close(self):
         self.__running = False
 
-    def draw_line(self, line, fill_colour):
+    def draw_line(self, line, fill_colour="black"):
         line.draw(self.__canvas, fill_colour)
 
 class Point:
@@ -34,7 +34,7 @@ class Line:
         self.point_one = point_one
         self.point_two = point_two
 
-    def draw(self, canvas, fill_colour):
+    def draw(self, canvas, fill_colour="black"):
         canvas.create_line(
             self.point_one.x,
             self.point_one.y,
@@ -43,4 +43,36 @@ class Line:
             fill=fill_colour,
             width=2
         )
+
+class Cell:
+    def __init__(self, window):
+        self.has_left_wall = True
+        self.has_right_wall = True
+        self.has_top_wall = True
+        self.has_bottom_wall = True
+        self._x1 = None
+        self._y1 = None
+        self._x2 = None
+        self._y2 = None
+        self._win = window
+
+    def draw(self, x1, y1, x2, y2):
+        self._x1 = x1
+        self._y1 = y1
+        self._x2 = x2
+        self._y2 = y2
+
+        top_left_point = Point(x1, y1)
+        top_right_point = Point(x2, y1)
+        bottom_left_point = Point(x1, y2)
+        bottom_right_point = Point(x2, y2)
+
+        if self.has_left_wall:
+            self._win.draw_line(Line(top_left_point, bottom_left_point))
+        if self.has_right_wall:
+            self._win.draw_line(Line(top_right_point, bottom_right_point))
+        if self.has_top_wall:
+            self._win.draw_line(Line(top_left_point, top_right_point))
+        if self.has_bottom_wall:
+            self._win.draw_line(Line(bottom_left_point, bottom_right_point))
 
