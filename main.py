@@ -1,7 +1,5 @@
-from random import randrange
-from time import sleep
-
 from graphics import Window, Line, Point, Cell
+from maze import Maze
 
 def main():
     print("Running")
@@ -11,18 +9,11 @@ def main():
     cell_size = 50
 
     win = Window(width, height)
+    
+    num_rows = (height - (cell_size * 2)) // cell_size
+    num_cols = (width - (cell_size * 2)) // cell_size
 
-    cells = []
-    for i in range(cell_size, width - cell_size, cell_size):
-        for j in range(cell_size, height - cell_size, cell_size):
-            cell = Cell(win)
-            cells.append(cell)
-            cell.draw(i, j, i+cell_size, j+cell_size)
-
-    cells[0].draw_move(cells[1])
-    sleep(1)
-    cells[1].draw_move(cells[2])
-    cells[2].draw_move(cells[1], True)
+    maze = Maze(cell_size, cell_size, num_rows, num_cols, cell_size, cell_size, win)
 
     win.wait_for_close()
 
