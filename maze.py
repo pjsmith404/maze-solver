@@ -119,3 +119,60 @@ class Maze:
         for col in self._cells:
             for cell in col:
                 cell.visited = False
+
+    def solve(self):
+        print("start solve")
+        return self._solve_r(0, 0)
+
+    def _solve_r(self, i, j):
+        self._animate()
+        current_cell = self._cells[i][j]
+        current_cell.visited = True
+
+        end_cell = self._cells[self._num_cols-1][self._num_rows-1]
+        if current_cell == end_cell:
+            return True
+        
+        above = (i, j-1, "above")
+        below = (i, j+1, "below")
+        left = (i-1, j, "left")
+        right = (i+1, j, "right")
+
+        adjacent = [above, below, left, right]
+
+        for adj in adjacent:
+            k, l, direction = adj
+            if k >= 0 and k < self._num_cols and l >= 0 and l < self._num_rows:
+                next_cell = self._cells[k][l]
+                if next_cell.visited == False:
+                    if direction == "above" and next_cell.has_bottom_wall is False:
+                       current_cell.draw_move(next_cell)
+                       result = self._solve_r(k, l)
+                       if result:
+                           return True
+                       else:
+                           current_cell.draw_move(next_cell, True)
+                    elif direction == "below" and next_cell.has_top_wall is False:
+                        current_cell.draw_move(next_cell)
+                        result = self._solve_r(k, l)
+                        if result:
+                            return True
+                        else:
+                            current_cell.draw_move(next_cell, True)
+                    elif direction == "left" and next_cell.has_right_wall is False:
+                        current_cell.draw_move(next_cell)
+                        result = self._solve_r(k, l)
+                        if result:
+                            return True
+                        else:
+                            current_cell.draw_move(next_cell, True)
+                    elif direction == "right" and next_cell.has_left_wall is False:
+                        current_cell.draw_move(next_cell)
+                        result = self._solve_r(k, l)
+                        if result:
+                            return True
+                        else:
+                            current_cell.draw_move(next_cell, True)
+
+        return False
+
